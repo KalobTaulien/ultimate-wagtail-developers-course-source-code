@@ -1,0 +1,63 @@
+# Python files
+*.py[cod]
+__pycache__/
+*.pyo
+*.egg-info/
+dist/
+build/
+*.pyc
+
+# IDEs
+# PyCharm
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Django
+*.pot
+*.mo
+local_settings.py
+db.sqlite3
+media/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~
+.swo
+.swp
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Python versions
+.python-version
+
+# Environment variables
+.env
+env
+
+# Virtual Environment
+venv/
+.venv/
