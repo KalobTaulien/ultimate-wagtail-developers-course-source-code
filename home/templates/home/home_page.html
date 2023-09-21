@@ -1,21 +1,17 @@
 {% extends "base.html" %}
-{% load static %}
 
-{% block body_class %}template-homepage{% endblock %}
-
-{% block extra_css %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
-{% endblock extra_css %}
 
 {% block content %}
+    {% comment %}
+        Remember that:
+        Page = the page object
+        Page.title = the title of the page
+        Page.subtitle = the subtitle of the page
 
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{% include 'home/welcome_page.html' %}
-
+        Also:
+        Page.title (in Python) = {{ page.title }} (in the template)
+        Page.subtitle (in Python) = {{ page.subtitle }} (in the template)
+    {% endcomment %}
+    <h1>{{ page.title }}</h1>
+    <h3>{{ page.subtitle }}</h3>
 {% endblock content %}
