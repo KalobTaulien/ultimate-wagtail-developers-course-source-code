@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags %}
 
 
 {% block content %}
@@ -14,4 +15,11 @@
     {% endcomment %}
     <h1>{{ page.title }}</h1>
     <h3>{{ page.subtitle }}</h3>
+
+    {% if page.body %}
+        {{ page.body|richtext }}
+    {% endif %}
+
+
+
 {% endblock content %}
