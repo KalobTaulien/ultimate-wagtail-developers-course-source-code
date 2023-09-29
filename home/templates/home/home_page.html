@@ -40,7 +40,17 @@
     {% endcomment %}
     {% image page.image fill-90x200 as custom_img %}
     {{ custom_img.url }}
-    {{ custom_img.width }}
-    {{ custom_img.height }}
+
+    <h3>Dynamic image serve view below</h3>
+    {% comment %}
+        1. Remember to use {% image_url %} instead of {% image %}
+        2. {% image %} returns an object so `image.url` is available.
+        3. {% image_url %} returns a string so `image` is available as the full url.
+    {% endcomment %}
+    {% image_url page.image "fill-150x150" as custom_img2 %}
+    {{ custom_img2 }}
+    <img src="{{ custom_img2 }}" alt="">
+    {# OR #}
+    <img src='{% image_url page.image "fill-150x150|jpegquality-100" as custom_img2 %}' alt="">
 
 {% endblock content %}
