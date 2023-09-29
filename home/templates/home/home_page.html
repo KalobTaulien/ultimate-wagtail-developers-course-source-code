@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 
 {% block content %}
@@ -20,6 +20,27 @@
         {{ page.body|richtext }}
     {% endif %}
 
+    <hr>
+    <hr>
+    <hr>
+    <hr>
 
+    Image stuff below: <br>
+
+    {% comment %}
+        Image renditions below.
+    {% endcomment %}
+    {% image page.image fill-150x150-c100 format-jpeg %}
+    {% image page.image width-400 %}
+    {% image page.image width-400 format-avif-lossless %}
+    {% image page.image width-400 format-webp-lossless %}
+
+    {% comment %}
+        Using an image as a template variable
+    {% endcomment %}
+    {% image page.image fill-90x200 as custom_img %}
+    {{ custom_img.url }}
+    {{ custom_img.width }}
+    {{ custom_img.height }}
 
 {% endblock content %}

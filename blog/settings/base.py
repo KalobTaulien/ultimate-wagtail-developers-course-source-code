@@ -167,3 +167,5 @@ WAGTAILSEARCH_BACKENDS = {
 WAGTAILADMIN_BASE_URL = "http://example.com"
 
 WAGTAILIMAGES_IMAGE_MODEL = "images.CustomImage"
+
+WAGTAILIMAGES_EXTENSIONS = ["jpg", "jpeg", "gif", "png", "svg", "webp"]
