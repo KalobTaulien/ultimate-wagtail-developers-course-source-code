@@ -1,56 +1,18 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
 
 
 {% block content %}
-    {% comment %}
-        Remember that:
-        Page = the page object
-        Page.title = the title of the page
-        Page.subtitle = the subtitle of the page
 
-        Also:
-        Page.title (in Python) = {{ page.title }} (in the template)
-        Page.subtitle (in Python) = {{ page.subtitle }} (in the template)
-    {% endcomment %}
-    <h1>{{ page.title }}</h1>
-    <h3>{{ page.subtitle }}</h3>
+    {% if page.custom_document %}
+        THIS IS THE DOWNLOAD URL:
+        {{ page.custom_document.url }}
 
-    {% if page.body %}
-        {{ page.body|richtext }}
+        <a href="{{ page.custom_document.url }}" download>Download</a>
+
+
+        {{ page.custom_document.title }}
+        -
+        {{ page.custom_document.description }}
     {% endif %}
-
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-
-    Image stuff below: <br>
-
-    {% comment %}
-        Image renditions below.
-    {% endcomment %}
-    {% image page.image fill-150x150-c100 format-jpeg %}
-    {% image page.image width-400 %}
-    {% image page.image width-400 format-avif-lossless %}
-    {% image page.image width-400 format-webp-lossless %}
-
-    {% comment %}
-        Using an image as a template variable
-    {% endcomment %}
-    {% image page.image fill-90x200 as custom_img %}
-    {{ custom_img.url }}
-
-    <h3>Dynamic image serve view below</h3>
-    {% comment %}
-        1. Remember to use {% image_url %} instead of {% image %}
-        2. {% image %} returns an object so `image.url` is available.
-        3. {% image_url %} returns a string so `image` is available as the full url.
-    {% endcomment %}
-    {% image_url page.image "fill-150x150" as custom_img2 %}
-    {{ custom_img2 }}
-    <img src="{{ custom_img2 }}" alt="">
-    {# OR #}
-    <img src='{% image_url page.image "fill-150x150|jpegquality-100" as custom_img2 %}' alt="">
 
 {% endblock content %}
