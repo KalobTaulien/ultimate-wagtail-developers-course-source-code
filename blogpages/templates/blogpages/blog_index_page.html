@@ -9,4 +9,17 @@
     <h4>Body is below:</h4>
     {{ page.body|richtext }}
 
+    <hr>
+    <hr>
+    <hr>
+
+    <h4>Blog posts are below</h4>
+    {% for blog_post in blogpages %}
+        <a href="{{ blog_post.url }}">
+            {{ blog_post.title }}
+        </a>
+        <p>{{ blog_post.subtitle }}</p>
+        <hr>
+    {% endfor %}
+
 {% endblock %}
