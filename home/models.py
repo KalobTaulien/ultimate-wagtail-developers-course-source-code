@@ -11,6 +11,7 @@ class HomePage(Page):
 
     # How to change the template location
     template = "home/home_page.html"
+    max_count = 1
 
     subtitle = models.CharField(max_length=100, blank=True, null=True)
     body = RichTextField(blank=True)
