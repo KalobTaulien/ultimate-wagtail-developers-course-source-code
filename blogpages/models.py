@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from wagtail.models import Page
@@ -36,3 +37,23 @@ class BlogDetail(Page):
         FieldPanel('subtitle'),
         FieldPanel('body'),
     ]
+
+    def clean(self):
+        super().clean()
+
+        errors = {}
+
+        if 'blog' in self.title.lower():
+            errors['title'] = "Title cannot have the word 'Blog'"
+
+        if 'blog' in self.subtitle.lower():
+            errors['subtitle'] = "Subtitle cannot have the word 'Blog'"
+
+        if 'blog' in self.slug.lower():
+            errors['slug'] = "Slug cannot have the word 'Blog'"
+
+        if errors:
+            raise ValidationError(errors)
+
+
+
