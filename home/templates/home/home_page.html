@@ -3,16 +3,22 @@
 
 {% block content %}
 
-    {% if page.custom_document %}
-        THIS IS THE DOWNLOAD URL:
-        {{ page.custom_document.url }}
+    {# This is the long way #}
+    {% if page.cta_url or page.cta_external_url %}
+        {% if page.cta_url %}
+            <a href="{{ page.cta_url.url }}">
+                {{ page.cta_url.title }}
+            </a>
+        {% else %}
+            <a href="{{ page.cta_external_url }}">
+                Some website
+            </a>
+        {% endif %}
+    {% endif %}
 
-        <a href="{{ page.custom_document.url }}" download>Download</a>
-
-
-        {{ page.custom_document.title }}
-        -
-        {{ page.custom_document.description }}
+    {# This is the short way using a custom @property #}
+    {% if page.get_cta_url %}
+        {{ page.get_cta_url }}
     {% endif %}
 
 {% endblock content %}
