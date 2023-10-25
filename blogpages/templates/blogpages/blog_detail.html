@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+    <style>
+        .richtext {
+            max-width: 50%;
+            border: 1px solid black;
+        }
+        .richtext .richtext-image.thumbnail-150 {
+            border: 10px solid blue;
+        }
+    </style>
+
+
+    <div class="richtext">
+        {{ page.body|richtext }}
+    </div>
+
+{% endblock %}

@@ -29,7 +29,10 @@ class BlogIndex(Page):
 
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
-    body = RichTextField(blank=True)
+    body = RichTextField(
+        blank=True,
+        features=['blockquote', 'h3', 'image', 'ul', 'strikethrough']
+    )
     parent_page_types = ['blogpages.BlogIndex']
     subpage_types = []
 
