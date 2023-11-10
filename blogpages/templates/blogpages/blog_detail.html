@@ -17,4 +17,10 @@
         {{ page.body|richtext }}
     </div>
 
+    <h3>Tags:</h3>
+    {% for tag in page.tags.all %}
+        {{ tag.name }} <a href="/blog/?tag={{ tag.slug }}">{{ tag.slug }}</a>
+    {% endfor %}
+
+
 {% endblock %}
