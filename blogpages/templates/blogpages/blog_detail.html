@@ -1,25 +1,15 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <style>
-        .richtext {
-            max-width: 50%;
-            border: 1px solid black;
-        }
-        .richtext .richtext-image.thumbnail-150 {
-            border: 10px solid blue;
-        }
-    </style>
 
 
-    <div class="richtext">
-        {{ page.body|richtext }}
-    </div>
-
-    <h3>Tags:</h3>
-    {% for tag in page.tags.all %}
-        {{ tag.name }} <a href="/blog/?tag={{ tag.slug }}">{{ tag.slug }}</a>
+    {% for block in page.body %}
+        {% if block.block_type == 'text' %}
+            {{ block.value }}
+        {% elif block.block_type == 'image' %}
+            {% image block.value fill-800x400 %}
+        {% endif %}
     {% endfor %}
 
 

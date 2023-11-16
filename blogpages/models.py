@@ -4,8 +4,11 @@ from django.db import models
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
+
 from wagtail.models import Page
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
+from wagtail.blocks import TextBlock
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.admin.panels import FieldPanel
 
 
@@ -36,22 +39,32 @@ class BlogPageTags(TaggedItemBase):
         on_delete=models.CASCADE,
     )
 
+
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
-    body = RichTextField(
-        blank=True,
-        features=['blockquote', 'h3', 'image', 'ul', 'strikethrough']
-    )
     tags = ClusterTaggableManager(through=BlogPageTags, blank=True)
 
+    body = StreamField(
+        [
+            ('text', TextBlock()),
+            ('image', ImageChooserBlock()),
+        ],
+        block_counts={
+            'text': {'min_num': 1},
+            'image': {'max_num': 1},
+        },
+        use_json_field=True,
+        blank=True,
+        null=True,
+    )
 
     parent_page_types = ['blogpages.BlogIndex']
     subpage_types = []
 
     content_panels = Page.content_panels + [
+        FieldPanel('body'),
         FieldPanel('subtitle'),
         FieldPanel('tags'),
-        FieldPanel('body'),
     ]
 
     def clean(self):
