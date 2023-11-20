@@ -50,6 +50,17 @@
                     {% endif %}
                 </a>
             </div>
+        {% elif block.block_type == 'info' %}
+            <div style='background-color: black; color: white; font-size: 24px; padding: 30px; text-align: center;'>
+                Danger, Will Robinson!
+            </div>
+        {% elif block.block_type == 'faq' %}
+
+            {% for faq in block.value %}
+                <h2>{{ faq.question }}</h2>
+                {{ faq.answer|richtext }}
+            {% endfor %}
+
         {% endif %}
 
 
