@@ -11,6 +11,8 @@ from wagtail.blocks import TextBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.admin.panels import FieldPanel
 from wagtail import blocks
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
 
 
 class BlogIndex(Page):
@@ -33,6 +35,7 @@ class BlogIndex(Page):
         context['blogpages'] = BlogDetail.objects.live().public()
         return context
 
+
 class BlogPageTags(TaggedItemBase):
     content_object = ParentalKey(
         'blogpages.BlogDetail',
@@ -48,7 +51,6 @@ class BlogDetail(Page):
     body = StreamField(
         [
             ('text', TextBlock()),
-            ('image', ImageChooserBlock()),
             ('carousel', blocks.StreamBlock(
                 [
                     ('image', ImageChooserBlock()),
@@ -59,6 +61,27 @@ class BlogDetail(Page):
                         ],
                     )),
                 ]
+            )),
+            ('image', ImageChooserBlock()),
+            ('doc', DocumentChooserBlock()),
+            ('page', blocks.PageChooserBlock(
+                required=False,
+                page_type='home.HomePage'
+            )),
+            ('author', SnippetChooserBlock('blogpages.Author')),
+            ('call_to_action_1', blocks.StructBlock(
+                [
+                    ('text', blocks.RichTextBlock(
+                        features=['bold', 'italic'],
+                        required=True,
+                    )),
+                    ('page', blocks.PageChooserBlock()),
+                    ('button_text', blocks.CharBlock(
+                        max_length=100,
+                        required=False,
+                    )),
+                ],
+                label='CTA #1'
             ))
         ],
         block_counts={
@@ -97,4 +120,11 @@ class BlogDetail(Page):
             raise ValidationError(errors)
 
 
+# Author model for SnippetChooserBlock and ForeignKey's to the Author model.
+# Panels go in the SnipeptViewSet in wagtail_hooks.py
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    bio = models.TextField()
 
+    def __str__(self):
+        return self.name
