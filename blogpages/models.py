@@ -10,6 +10,7 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.blocks import TextBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.admin.panels import FieldPanel
+from wagtail import blocks
 
 
 class BlogIndex(Page):
@@ -48,6 +49,17 @@ class BlogDetail(Page):
         [
             ('text', TextBlock()),
             ('image', ImageChooserBlock()),
+            ('carousel', blocks.StreamBlock(
+                [
+                    ('image', ImageChooserBlock()),
+                    ('quotation', blocks.StructBlock(
+                        [
+                            ('text', TextBlock()),
+                            ('author', TextBlock()),
+                        ],
+                    )),
+                ]
+            ))
         ],
         block_counts={
             'text': {'min_num': 1},
