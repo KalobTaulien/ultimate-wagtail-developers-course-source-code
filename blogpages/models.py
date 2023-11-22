@@ -7,8 +7,6 @@ from taggit.models import TaggedItemBase
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
-from wagtail.blocks import TextBlock
-from wagtail.images.blocks import ImageChooserBlock
 from wagtail.admin.panels import FieldPanel
 from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
@@ -43,6 +41,7 @@ class BlogPageTags(TaggedItemBase):
         on_delete=models.CASCADE,
     )
 
+from blocks import blocks as custom_blocks
 
 class BlogDetail(Page):
     subtitle = models.CharField(max_length=100, blank=True)
@@ -50,53 +49,21 @@ class BlogDetail(Page):
 
     body = StreamField(
         [
-            ('info', blocks.StaticBlock(
-                admin_text='This is a content divider with extra information.'
+            ('info', custom_blocks.InfoBlock()),
+            ('faq', custom_blocks.FAQListBlock()),
+            ('text', custom_blocks.TextBlock()),
+            ('carousel', custom_blocks.CarouselBlock()),
+            ('image', custom_blocks.ImageBlock()),
+            ('doc', DocumentChooserBlock(
+                group="Standalone blocks"
             )),
-            ('faq', blocks.ListBlock(
-                blocks.StructBlock([
-                    ('question', blocks.CharBlock()),
-                    ('answer', blocks.RichTextBlock(
-                        features=['bold', 'italic'],
-                    )),
-                ]),
-                min_num=1,
-                max_num=5,
-                label='Frequently Asked Questions'
-            )),
-            ('text', TextBlock()),
-            ('carousel', blocks.StreamBlock(
-                [
-                    ('image', ImageChooserBlock()),
-                    ('quotation', blocks.StructBlock(
-                        [
-                            ('text', TextBlock()),
-                            ('author', TextBlock()),
-                        ],
-                    )),
-                ]
-            )),
-            ('image', ImageChooserBlock()),
-            ('doc', DocumentChooserBlock()),
             ('page', blocks.PageChooserBlock(
                 required=False,
-                page_type='home.HomePage'
+                page_type='home.HomePage',
+                group="Standalone blocks"
             )),
             ('author', SnippetChooserBlock('blogpages.Author')),
-            ('call_to_action_1', blocks.StructBlock(
-                [
-                    ('text', blocks.RichTextBlock(
-                        features=['bold', 'italic'],
-                        required=True,
-                    )),
-                    ('page', blocks.PageChooserBlock()),
-                    ('button_text', blocks.CharBlock(
-                        max_length=100,
-                        required=False,
-                    )),
-                ],
-                label='CTA #1'
-            ))
+            ('call_to_action_1', custom_blocks.CallToAction1())
         ],
         block_counts={
             'text': {'min_num': 1},

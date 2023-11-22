@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "images",
     "documents",
     "blogpages",
+    "blocks",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",

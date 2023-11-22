@@ -1,0 +1,14 @@
+{% load wagtailcore_tags %}
+
+<div>
+    <div class="rich-text">
+        {{ self.text|richtext }}
+    </div>
+    <a href="{{ self.page.url }}">
+        {% if self.button_text %}
+            {{ self.button_text }}
+        {% else %}
+            {{ self.page.title }}
+        {% endif %}
+    </a>
+</div>

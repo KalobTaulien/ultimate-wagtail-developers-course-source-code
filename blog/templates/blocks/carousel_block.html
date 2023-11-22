@@ -1,0 +1,15 @@
+{% load wagtailimages_tags %}
+
+
+{% for slide in self %}
+    {% if slide.block_type == 'image' %}
+        {% image slide.value fill-800x400 %}
+    {% elif slide.block_type == 'quotation' %}
+        <p>
+            {{ slide.value.text }}<br>
+            <strong>
+                &mdash; {{ slide.value.author }}
+            </strong>
+        </p>
+    {% endif %}
+{% endfor %}
