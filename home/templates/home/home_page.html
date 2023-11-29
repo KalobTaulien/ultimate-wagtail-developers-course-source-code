@@ -20,4 +20,9 @@
         {{ page.get_cta_url }}
     {% endif %}
 
+    {# How to loop through an Orderable/InlinePanel #}
+    {% for orderable_object in page.gallery_images.all %}
+        {{ orderable_object.image }}<br>
+    {% endfor %}
+
 {% endblock content %}

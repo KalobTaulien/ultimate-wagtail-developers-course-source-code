@@ -175,4 +175,4 @@ WAGTAILIMAGES_EXTENSIONS = ["jpg", "jpeg", "gif", "png", "svg", "webp"]
 
 WAGTAILDOCS_DOCUMENT_MODEL = "documents.CustomDocument"
 
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
