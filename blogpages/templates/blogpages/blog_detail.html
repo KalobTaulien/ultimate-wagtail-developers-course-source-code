@@ -1,10 +1,20 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtail_cache %}
 
 {% block content %}
 
-    {% for block in page.body %}
-        {% include_block page.body %}
-    {% endfor %}
+    {# This is preview-aware #}
+    {% wagtailpagecache 500 "title-cache" %}
+        <h1>
+            {{ page.title }}
+        </h1>
+    {% endwagtailpagecache %}
+
+    {# This is preview-aware PLUS page.id+site.id aware #}
+    {% wagtailpagecache 500 "streamfields" %}
+        {% for block in page.body %}
+            {% include_block page.body %}
+        {% endfor %}
+    {% endwagtailpagecache %}
 
 {% endblock %}

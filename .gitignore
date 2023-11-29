@@ -61,3 +61,6 @@ env
 # Virtual Environment
 venv/
 .venv/
+
+# No need to commit your cache files.
+.cache/
