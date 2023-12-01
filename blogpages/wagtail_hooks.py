@@ -28,3 +28,11 @@ class AuthorSnippet(SnippetViewSet):
         FieldPanel("name"),
         FieldPanel("bio"),
     ]
+
+
+from django.core.cache import cache
+from wagtail import hooks
+
+@hooks.register('after_publish_page')
+def delete_all_cache(request, page):
+    cache.clear()
