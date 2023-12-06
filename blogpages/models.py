@@ -44,6 +44,10 @@ class BlogPageTags(TaggedItemBase):
 from blocks import blocks as custom_blocks
 
 class BlogDetail(Page):
+
+    # Below will overwrite the `PASSWORD_REQUIRED_TEMPLATE` setting in settings/base.py
+    # password_required_template = 'blogpages/password_in_here_file.html'
+
     subtitle = models.CharField(max_length=100, blank=True)
     tags = ClusterTaggableManager(through=BlogPageTags, blank=True)
 
