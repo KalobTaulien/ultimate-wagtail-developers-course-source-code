@@ -1,0 +1,14 @@
+{% if warning %}
+    <div style='background-color: red; padding: 20px;'>
+        {{ warning }}
+    </div>
+{% endif %}
+
+<div style="background-color: black; color: white; font-size: 18px;">
+    <div>
+        {{ object.name }}
+    </div>
+    <div style='font-size: 14px;'>
+        {{ object.bio }}
+    </div>
+</div>

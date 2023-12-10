@@ -17,4 +17,8 @@
         {% endfor %}
     {% endwagtailpagecache %}
 
+    {# Use `self.author` from the Page inside of `author_dark_mode.html` as `object` #}
+    {% include "includes/author_dark_mode.html" with object=self.author %}
+
+
 {% endblock %}

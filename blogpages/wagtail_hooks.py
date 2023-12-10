@@ -24,10 +24,7 @@ class TagSnippetViewSet(SnippetViewSet):
 class AuthorSnippet(SnippetViewSet):
     model = Author
     add_to_admin_menu = False
-    panels = [
-        FieldPanel("name"),
-        FieldPanel("bio"),
-    ]
+
 
 
 from django.core.cache import cache

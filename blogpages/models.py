@@ -12,6 +12,14 @@ from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
+from blocks import blocks as custom_blocks
+
+from django.contrib.contenttypes.fields import GenericRelation
+from wagtail.admin.panels import PublishingPanel
+from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
+
+from wagtail.search import index
+
 
 class BlogIndex(Page):
 
@@ -41,7 +49,6 @@ class BlogPageTags(TaggedItemBase):
         on_delete=models.CASCADE,
     )
 
-from blocks import blocks as custom_blocks
 
 class BlogDetail(Page):
 
@@ -50,6 +57,13 @@ class BlogDetail(Page):
 
     subtitle = models.CharField(max_length=100, blank=True)
     tags = ClusterTaggableManager(through=BlogPageTags, blank=True)
+    author = models.ForeignKey(
+        'blogpages.Author',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
 
     body = StreamField(
         [
@@ -82,6 +96,7 @@ class BlogDetail(Page):
     subpage_types = []
 
     content_panels = Page.content_panels + [
+        FieldPanel('author'),
         FieldPanel('body'),
         FieldPanel('subtitle'),
         FieldPanel('tags'),
@@ -107,9 +122,48 @@ class BlogDetail(Page):
 
 # Author model for SnippetChooserBlock and ForeignKey's to the Author model.
 # Panels go in the SnipeptViewSet in wagtail_hooks.py
-class Author(models.Model):
+class Author(
+        PreviewableMixin,  # Allows previews
+        LockableMixin,  # Makes the model lockable
+        DraftStateMixin,  # Needed for Drafts
+        RevisionMixin,  # Needed for Revisions
+        index.Indexed,  # Makes this searchable; don't forget to run python manage.py update_index
+        models.Model
+    ):
     name = models.CharField(max_length=100)
     bio = models.TextField()
+    revisions = GenericRelation("wagtailcore.Revision", related_query_name="author")
+
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("bio"),
+        PublishingPanel(),
+    ]
+
+    search_fields = [
+        index.FilterField('name'),
+        index.SearchField('name'),
+        index.AutocompleteField('name'),
+    ]
 
     def __str__(self):
         return self.name
+
+    @property
+    def preview_modes(self):
+        return PreviewableMixin.DEFAULT_PREVIEW_MODES + [
+            ("dark_mode", "Dark Mode")
+        ]
+
+    def get_preview_template(self, request, mode_name):
+        # return "includes/author.html"  # Default for a single preview template
+        templates = {
+            "": "includes/author.html", # Default
+            "dark_mode": "includes/author_dark_mode.html"
+        }
+        return templates.get(mode_name, templates[""])
+
+    def get_preview_context(self, request, mode_name):
+        context = super().get_preview_context(request, mode_name)
+        context['warning'] = "This is a preview"
+        return context
