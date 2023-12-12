@@ -135,7 +135,7 @@ class Author(
     revisions = GenericRelation("wagtailcore.Revision", related_query_name="author")
 
     panels = [
-        FieldPanel("name"),
+        FieldPanel("name", permission="blogpage.can_edit_author_name"),
         FieldPanel("bio"),
         PublishingPanel(),
     ]
