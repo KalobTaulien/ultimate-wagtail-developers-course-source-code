@@ -33,3 +33,13 @@ from wagtail import hooks
 @hooks.register('after_publish_page')
 def delete_all_cache(request, page):
     cache.clear()
+
+
+from django.contrib.auth.models import Permission
+
+@hooks.register('register_permissions')
+def customer_permission_numero_uno():
+    return Permission.objects.filter(
+        content_type__app_label='blogpages',
+        codename='can_edit_author_name'
+    )
