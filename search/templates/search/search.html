@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailsearchpromotions_tags %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
@@ -13,6 +13,33 @@
     <input type="submit" value="Search" class="button">
 </form>
 
+{% get_search_promotions search_query as search_promotions %}
+<h1>Promoted Search results are below</h1>
+
+
+{% for search_promotion in search_promotions %}
+<ul>
+    {% if search_promotion.page %}
+        <li>
+            <a href="{% pageurl search_promotion.page %}">
+                <h2>{{ search_promotion.page.title }}</h2>
+                <p>{{ search_promotion.description }}</p>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a href="{{ search_promotion.external_link_url }}">
+                <h2>{{ search_promotion.external_link_text }}</h2>
+                <p>{{ search_promotion.description }}</p>
+            </a>
+        </li>
+    {% endif %}
+</ul>
+{% endfor %}
+
+
+
+<h1>Normal search results are below</h1>
 {% if search_results %}
 <ul>
     {% for result in search_results %}
