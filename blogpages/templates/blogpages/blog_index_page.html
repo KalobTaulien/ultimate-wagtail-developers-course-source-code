@@ -1,7 +1,16 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block content %}
+
+    {% comment %}
+        {% routablepageurl page "all" %} This goes to /blog/all/
+        {% routablepageurl page "tag" tag="cats" %} This goes to /blog/tag/cats/
+    {% endcomment %}
+
+    <a href='{% routablepageurl page "tag" tag="cats" %}'>
+        View blog posts filtered by Cat
+    </a>
 
     <h1>{{ page.title }}</h1>
     <h3>{{ page.subtitle }}</h3>

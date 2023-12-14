@@ -20,8 +20,11 @@ from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, Previe
 
 from wagtail.search import index
 
+from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
+from django.http import JsonResponse
 
-class BlogIndex(Page):
+
+class BlogIndex(RoutablePageMixin, Page):
 
     template = 'blogpages/blog_index_page.html'
     max_count = 1
@@ -36,9 +39,63 @@ class BlogIndex(Page):
         FieldPanel('body'),
     ]
 
+    # Example path that overwrites the default blog index page.
+    # This is currently more work that using `get_context()` in the BlogIndex class.
+    # @path('')
+    # def default_blog_page(self, request):
+    #     course_name = "The Ultimate Wagtail Developers Course"
+
+    #     return self.render(
+    #         request,
+    #         context_overrides={
+    #             'course_name': course_name
+    #         }
+    #     )
+
+    # /blog/all/ is what this will generate.
+    @path('all/', name='all')
+    def all_blog_posts(self, request):
+        posts = BlogDetail.objects.live().public()
+
+        return self.render(
+            request,
+            context_overrides={
+                'posts': posts
+            }
+        )
+
+    # /blog/tag/{tagName}/
+    # /blog/tags/{tagName}/
+    @path('tag/<str:tag>/', name='tag')
+    @path('tags/<str:tag>/', name='tags')
+    def blog_posts_by_tag(self, request, tag=None):
+        posts = BlogDetail.objects.live().public().filter(tags__name=tag)
+
+        if not tag:
+            ... # redirect in here
+
+        return self.render(
+            request,
+            context_overrides={
+                'posts': posts,
+                'tag': tag
+            },
+            template='blogpages/blog_tag_page.html'
+        )
+
+    # uses regular expression path (re_path) to match the year
+    # /blog/api/2025/ as an example
+    @re_path(r'^api/(\d+)/$', name='api')
+    def api_response(self, request, year):
+        posts = BlogDetail.objects.live().public().filter(first_published_at__year=year)
+        return JsonResponse({
+            'year': year,
+            'posts': list(posts.values('title', 'first_published_at'))
+        })
+
     def get_context(self, request):
         context = super().get_context(request)
-        context['blogpages'] = BlogDetail.objects.live().public()
+        context['blogpages'] = BlogDetail.objects.live().public()[:5]
         return context
 
 
