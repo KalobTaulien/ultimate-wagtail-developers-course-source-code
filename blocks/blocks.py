@@ -131,6 +131,13 @@ class CallToAction1(blocks.StructBlock):
 
 class ImageBlock(ImageChooserBlock):
 
+    def get_api_representation(self, value, context=None):
+        return {
+            'id': value.id,
+            'title': value.title,
+            'src': value.get_rendition('fill-400x400').url,
+        }
+
     def get_context(self, value, parent_context=None):
         from blogpages.models import BlogDetail
         context = super().get_context(value, parent_context)
@@ -140,3 +147,14 @@ class ImageBlock(ImageChooserBlock):
     class Meta:
         template = "blocks/image_block.html"
         group = "Standalone blocks"
+
+
+class CustomPageChooserBlock(blocks.PageChooserBlock):
+
+    def get_api_representation(self, value, context=None):
+        return {
+            'id': value.id,
+            'title': value.title,
+            'subtitle': value.specific.subtitle,
+            'url': value.url,
+        }

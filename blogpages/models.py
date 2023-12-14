@@ -19,9 +19,13 @@ from wagtail.admin.panels import PublishingPanel
 from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
 
 from wagtail.search import index
+from wagtail.api import APIField
+from wagtail.images import get_image_model
+from rest_framework.fields import Field
 
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
 from django.http import JsonResponse
+from wagtail.templatetags.wagtailcore_tags import richtext
 
 
 class BlogIndex(RoutablePageMixin, Page):
@@ -106,6 +110,43 @@ class BlogPageTags(TaggedItemBase):
         on_delete=models.CASCADE,
     )
 
+class AuthorSerializer(Field):
+    def to_representation(self, value):
+        return {
+            'name': value.name,
+            'bio': value.bio,
+        }
+
+class ImageSerializer(Field):
+    def to_representation(self, value):
+        return {
+            "original": {
+                'url': value.file.url,
+                'width': value.width,
+                'height': value.height,
+            },
+            "thumbnail": {
+                'url': value.get_rendition('max-165x165').url,
+                'width': value.get_rendition('max-165x165').width,
+                'height': value.get_rendition('max-165x165').height,
+            },
+            "small": {
+                'url': value.get_rendition('max-300x300').url,
+                'width': value.get_rendition('max-300x300').width,
+                'height': value.get_rendition('max-300x300').height,
+            },
+            "medium": {
+                'url': value.get_rendition('max-700x700').url,
+                'width': value.get_rendition('max-700x700').width,
+                'height': value.get_rendition('max-700x700').height,
+            },
+        }
+
+
+class RichTextFieldSerializer(Field):
+    def to_representation(self, value):
+        return richtext(value)
+
 
 class BlogDetail(Page):
 
@@ -122,6 +163,16 @@ class BlogDetail(Page):
         related_name='+'
     )
 
+    image = models.ForeignKey(
+        get_image_model(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    intro = RichTextField(blank=True)
+
     body = StreamField(
         [
             ('info', custom_blocks.InfoBlock()),
@@ -132,11 +183,7 @@ class BlogDetail(Page):
             ('doc', DocumentChooserBlock(
                 group="Standalone blocks"
             )),
-            ('page', blocks.PageChooserBlock(
-                required=False,
-                page_type='home.HomePage',
-                group="Standalone blocks"
-            )),
+            ('page', custom_blocks.CustomPageChooserBlock()),
             ('author', SnippetChooserBlock('blogpages.Author')),
             ('call_to_action_1', custom_blocks.CallToAction1())
         ],
@@ -152,11 +199,26 @@ class BlogDetail(Page):
     parent_page_types = ['blogpages.BlogIndex']
     subpage_types = []
 
+    def custom_content(self):
+        return 150 / 3
+
     content_panels = Page.content_panels + [
+        FieldPanel('image'),
+        FieldPanel('intro'),
         FieldPanel('author', permission='home.add_author'),
         FieldPanel('body'),
         FieldPanel('subtitle'),
         FieldPanel('tags'),
+    ]
+
+    api_fields = [
+        APIField('subtitle'),
+        APIField('intro', serializer=RichTextFieldSerializer()),
+        APIField('image', serializer=ImageSerializer()),
+        APIField('author', serializer=AuthorSerializer()),
+        APIField('body'),
+        APIField('custom_content'),
+        APIField('tags'),
     ]
 
     def clean(self):

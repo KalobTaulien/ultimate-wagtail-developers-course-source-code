@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "wagtail.contrib.redirects",
     "wagtail.contrib.search_promotions",
     "wagtail.contrib.routable_page",
+    "wagtail.api.v2",
+    "rest_framework",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
