@@ -2,6 +2,16 @@
 
 {% block content %}
 
+    {% comment %}
+        Shows up in English and Spanish
+        (or whichever languages you've chosen to use)
+        One template variable is needed.
+        No language detection required.
+    {% endcomment %}
+    <h1>{{ page.title }}</h1>
+
+
+
     {# This is the long way #}
     {% if page.cta_url or page.cta_external_url %}
         {% if page.cta_url %}

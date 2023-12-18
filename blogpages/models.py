@@ -11,6 +11,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
+from wagtail.models import TranslatableMixin, BootstrapTranslatableMixin
 
 from blocks import blocks as custom_blocks
 
@@ -258,6 +259,7 @@ class BlogDetail(Page):
 # Author model for SnippetChooserBlock and ForeignKey's to the Author model.
 # Panels go in the SnipeptViewSet in wagtail_hooks.py
 class Author(
+        TranslatableMixin,
         PreviewableMixin,  # Allows previews
         LockableMixin,  # Makes the model lockable
         DraftStateMixin,  # Needed for Drafts
@@ -303,7 +305,7 @@ class Author(
         context['warning'] = "This is a preview"
         return context
 
-    class Meta:
+    class Meta(TranslatableMixin.Meta):
         permissions = [
             ("can_edit_author_name", "Can edit author name")
         ]

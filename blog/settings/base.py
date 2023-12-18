@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     "wagtail.contrib.redirects",
     "wagtail.contrib.search_promotions",
     "wagtail.contrib.routable_page",
+    "wagtail.contrib.simple_translation",
+    "wagtail.locales",
     "wagtail.api.v2",
     "rest_framework",
     "wagtail.embeds",
@@ -67,6 +69,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "blog.urls"
@@ -126,13 +129,20 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "UTC"
 
 USE_I18N = True
-
 USE_L10N = True
+WAGTAIL_I18N_ENABLED = True
+WAGTAILSIMPLETRANSLATION_SYNC_PAGE_TREE = True
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ('en', 'English'),
+    ('fr', 'French'),
+    ('es', 'Spanish'),
+]
+
 
 USE_TZ = True
 
