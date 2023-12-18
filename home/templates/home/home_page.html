@@ -11,7 +11,10 @@
     <h1>{{ page.title }}</h1>
 
 
+    {{ page.cta_url.url }}
 
+
+{% comment %}
     {# This is the long way #}
     {% if page.cta_url or page.cta_external_url %}
         {% if page.cta_url %}
@@ -33,6 +36,6 @@
     {# How to loop through an Orderable/InlinePanel #}
     {% for orderable_object in page.gallery_images.all %}
         {{ orderable_object.image }}<br>
-    {% endfor %}
+    {% endfor %} {% endcomment %}
 
 {% endblock content %}
