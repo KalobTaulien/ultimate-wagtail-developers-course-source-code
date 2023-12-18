@@ -56,6 +56,22 @@ class BlogIndex(RoutablePageMixin, Page):
     #         }
     #     )
 
+    def get_sitemap_urls(self, request=None):
+        sitemap = super().get_sitemap_urls(request)
+        last_mod = BlogDetail.objects.live().order_by('-last_published_at').first()
+        sitemap.append({
+            'location': self.get_full_url(request) + self.reverse_subpage("all"),
+            'lastmod': (last_mod.last_published_at or last_mod.latest_revision_created_at),
+        })
+        sitemap.append({
+            'location': self.get_full_url(request) + self.reverse_subpage("tag", args=["wagtail"]),
+        })
+        sitemap.append({
+            'location': self.get_full_url(request) + self.reverse_subpage("tags", args=[2024]),
+        })
+        return sitemap
+
+
     # /blog/all/ is what this will generate.
     @path('all/', name='all')
     def all_blog_posts(self, request):
