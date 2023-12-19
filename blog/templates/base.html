@@ -54,6 +54,27 @@
                     </a>
                 {% endfor %}
             {% endif %}
+
+            <hr>
+
+            <div class="bg-slate-300 text-xs text-center p-10">
+                {{ settings.site_settings.GenericFooterText.text }}
+            </div>
+
+            {% with privacy_page=settings.site_settings.GenericFooterText.privacy_page %}
+                {% if privacy_page %}
+                    <a href="{{ privacy_page.url }}">Privacy Policy</a>
+                {% endif %}
+            {% endwith %}
+
+            <strong>Facebook URL:</strong>
+            {% with facebook_url=settings.site_settings.SocialMediaLinks.facebook %}
+                {% if facebook_url %}
+                    <a href="{{ facebook_url }}">Facebook</a>
+                {% endif %}
+            {% endwith %}
+
+
         {% endblock footer %}
 
 
