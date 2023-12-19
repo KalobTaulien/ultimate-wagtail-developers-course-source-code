@@ -64,4 +64,8 @@ venv/
 
 # No need to commit your cache files.
 .cache/
+
 static/
+node_modules/
+
+

@@ -24,7 +24,7 @@
         {% endif %}
 
         {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 
         {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
@@ -33,24 +33,18 @@
 
     <body class="{% block body_class %}{% endblock %}">
 
-        <a href="/">Home</a>
-        {% for menu_page in navbar_pages %}
-            <a href="{{ menu_page.url }}">
-                {{ menu_page.title}}
-            </a>
-        {% endfor %}
+        <header>
+            <a href="/">Home</a>
+            {% for menu_page in navbar_pages %}
+                <a href="{{ menu_page.url }}">
+                    {{ menu_page.title}}
+                </a>
+            {% endfor %}
+        </header>
 
-        <hr>
-        <hr>
-        <hr>
-        <hr>
-        <hr>
-        <hr>
         {% wagtailuserbar %}
 
         {% block content %}{% endblock %}
-
-
 
         {% block footer %}
             {% if page %}
