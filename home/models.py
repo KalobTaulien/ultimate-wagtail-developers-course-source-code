@@ -79,14 +79,14 @@ class HomePage(Page):
             max_num=4,
         ),
         # Inline / Orderable Example #1
-        MultipleChooserPanel(
-            'gallery_images',       # Links to HomePageGalleryImage.page (ParentalKey)
-            label="Gallery images",
-            min_num=2,
-            max_num=4,
-            chooser_field_name="image", # Uses the `image` field on HomePageGalleryImage
-            icon='code',
-        ),
+        # MultipleChooserPanel(
+        #     'gallery_images',       # Links to HomePageGalleryImage.page (ParentalKey)
+        #     label="Gallery images",
+        #     min_num=2,
+        #     max_num=4,
+        #     chooser_field_name="image", # Uses the `image` field on HomePageGalleryImage
+        #     icon='code',
+        # ),
         # MultiFieldPanel Example
         # Takes a List of Panels to group together from top to bottom. Can be nested.
         MultiFieldPanel(
