@@ -208,7 +208,6 @@ class BlogDetail(Page):
             'text': {'min_num': 1},
             'image': {'max_num': 1},
         },
-        use_json_field=True,
         blank=True,
         null=True,
     )
